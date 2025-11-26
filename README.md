@@ -1,6 +1,6 @@
 # FLAMP Relay File Queue ID Switcher
 
-swqid (pronounced "squid") is just a simple command line script that uses text search and replace to change the queue ID in FLAMP relay file.
+swqid (SWitch Queue ID, pronounced "squid") is just a simple command line script that uses text search and replace to change the queue ID in FLAMP relay file.
 
 This can be useful if you have a flamp relay file from one queue ID, but you are trying to fill some blocks for another operator who has the same file but under a different queue id.
 
