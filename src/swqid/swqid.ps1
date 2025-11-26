@@ -11,16 +11,14 @@ function Show-Help {
     Write-Output ""
     Write-Output "Simple program to change a FLAMP relay file from one queue id to another."
     Write-Output ""
-    Write-Output "Usage: $(Split-Path -Leaf $PSCommandPath) <new_queue> <relay_file>"
+    $name = Split-Path -Leaf $MyInvocation.MyCommand.Name
+    Write-Output "Usage: $name <new_queue> <relay_file>"
     Write-Output ""
     Write-Output "Where <new_queue> is the new queue ID you want to use, and"
     Write-Output "<relay_file> is the relay file you want to switch the queue in."
     Write-Output "The new relay file is printed to the standard output."
     Write-Output ""
-    Write-Output "Example: pwsh $(Split-Path -Leaf $PSCommandPath) 1234 my_file.txt > new_file.txt"
-    Write-Output ""
-    Write-Output "This example converts the existing relay file called my_file.txt,"
-    Write-Output "changes the queue to 1234 and puts the result in new_file.txt."
+    Write-Output "Example: pwsh $name 1234 my_file.txt > new_file.txt"
     Write-Output ""
 }
 
@@ -47,15 +45,14 @@ try {
 
 # Determine existing queue id of relay file
 # Looks for ">{XXXX:" where XXXX is the queue id and uses the first match
-$regex = '>\{([A-Za-z0-9_]+):'
-$match = [regex]::Match($content, $regex)
+$match = [regex]::Match($content, '>{(\w+):')
 
 if (-not $match.Success) {
     Write-Error "Could not determine queue id for file '$RELAY_FILE'"
     exit 3
 } else {
-    # Replace the existing queue id with the new one (preserve the rest)
-    $pattern = '>\{([A-Za-z0-9_]+)'
+    # Replace the existing queue id with the new one (global replacement like the original sed)
+    $pattern = '>{(\w+)'
     $replacement = ">{$QUEUE_NEW"
     $newContent = [regex]::Replace($content, $pattern, $replacement)
     Write-Output $newContent
