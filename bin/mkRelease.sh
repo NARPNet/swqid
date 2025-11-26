@@ -27,3 +27,4 @@ echo "Done."
 echo
 
 read -p "Press enter to continue"
+exit 0
